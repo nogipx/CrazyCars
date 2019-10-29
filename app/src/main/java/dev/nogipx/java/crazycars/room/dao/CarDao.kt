@@ -7,7 +7,7 @@ import dev.nogipx.java.crazycars.room.entity.Car
 @Dao
 abstract class CarDao {
   
-  @Insert
+  @Insert(onConflict = OnConflictStrategy.REPLACE)
   abstract fun insertCars(vararg cars: Car)
   
   @Update
