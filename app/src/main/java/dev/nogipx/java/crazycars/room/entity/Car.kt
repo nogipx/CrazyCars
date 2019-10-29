@@ -13,23 +13,23 @@ data class Car (
 
   @ColumnInfo(name = "carReleaseYear")
   @ExtraInfo(title = "Год выпуска")
-  var carReleaseYear: String,
+  var carReleaseYear: String = "",
   
   @ColumnInfo(name = "carModel")
   @ExtraInfo(title = "Модель")
-  var carModel: String,
+  var carModel: String = "",
   
   @ColumnInfo(name = "carManufacturer")
   @ExtraInfo(title = "Производитель")
-  var carManufacturer: String,
+  var carManufacturer: String = "",
   
   @ColumnInfo(name = "carClass")
   @ExtraInfo(title = "Класс")
-  var carClass: String,
+  var carClass: String = "",
   
   @ColumnInfo(name = "carBodyType")
   @ExtraInfo(title = "Тип кузова")
-  var carBodyType: String
+  var carBodyType: String = ""
 
 ) {
   @NonNull @PrimaryKey var uuid = UUID.randomUUID().toString()

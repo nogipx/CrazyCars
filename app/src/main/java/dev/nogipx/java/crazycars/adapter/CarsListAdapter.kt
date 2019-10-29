@@ -21,8 +21,8 @@ import kotlin.reflect.full.findAnnotation
 class CarsListAdapter(var cars: List<Car>)
   : RecyclerView.Adapter<CarsListAdapter.CarViewHolder>() {
   
-  lateinit var onClickDelete: (View, Car) -> Unit
-  lateinit var onClickEdit: (View, Car) -> Unit
+  var onClickDelete: (View, Car) -> Unit = {_, _ -> }
+  var onClickEdit: (View, Car) -> Unit = {_, _ -> }
   
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CarViewHolder {
     val view = LayoutInflater
@@ -47,12 +47,10 @@ class CarsListAdapter(var cars: List<Car>)
     
     holder.carDelete.setOnClickListener {
       onClickDelete(it, car)
-      notifyDataSetChanged()
     }
     
     holder.carEdit.setOnClickListener {
       onClickEdit(it, car)
-      notifyDataSetChanged()
     }
   }
   

@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 
 import dev.nogipx.java.crazycars.R
 import dev.nogipx.java.crazycars.adapter.CarsListAdapter
+import dev.nogipx.java.crazycars.preference.CarPreferenceFragment
 import dev.nogipx.java.crazycars.room.AppDatabase
 import dev.nogipx.java.crazycars.room.dao.CarDao
 import dev.nogipx.java.crazycars.room.entity.Car
@@ -33,9 +34,10 @@ class CarsListFragment(private val db: AppDatabase): Fragment() {
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
     val view = inflater.inflate(R.layout.fragment_cars_list, container, false)
     
+    // First retrieve data
     viewModel.updateCars(dao.getAllCars())
-    mAdapter = CarsListAdapter(viewModel.cars.value!!)
-    mAdapter.apply {
+    
+    mAdapter = CarsListAdapter(viewModel.cars.value!!).apply {
       
       onClickDelete = { view, car ->
         dao.deleteCar(car.uuid)
@@ -43,15 +45,42 @@ class CarsListFragment(private val db: AppDatabase): Fragment() {
       }
       
       onClickEdit = { view, car ->
-        // Open edit fragment
+        val carPreference = CarPreferenceFragment(car).apply {
+          onPauseFun = { car ->
+            dao.insertCars(car)
+            viewModel.updateCars(dao.getAllCars())
+          }
+        }
+        fragmentManager!!.beginTransaction()
+          .replace(R.id.fragmentContainer, carPreference)
+          .addToBackStack("editCar")
+          .commit()
       }
     }
     
+    // New record creation
+    view.carNew.setOnClickListener {
+      val carPreference = CarPreferenceFragment(Car()).apply {
+        onPauseFun = { car ->
+          dao.insertCars(car)
+          viewModel.updateCars(dao.getAllCars())
+        }
+      }
+      
+      fragmentManager!!.beginTransaction()
+        .replace(R.id.fragmentContainer, carPreference)
+        .addToBackStack("editCar")
+        .commit()
+    }
+    
+    // Handle cars set changes
     viewModel.cars.observe(this, Observer { cars ->
       cars.forEach { dao.updateCars(it) }
       mAdapter.cars = cars
+      mAdapter.notifyDataSetChanged()
     })
     
+    // Setup recycler view
     view.carsList.apply {
       adapter = mAdapter
       layoutManager = LinearLayoutManager(activity)
