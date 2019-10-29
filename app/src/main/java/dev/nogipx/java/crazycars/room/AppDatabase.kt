@@ -1,4 +1,4 @@
-package dev.nogipx.java.crazycars.room.db
+package dev.nogipx.java.crazycars.room
 
 import androidx.room.Database
 import androidx.room.RoomDatabase

@@ -5,21 +5,28 @@ import dev.nogipx.java.crazycars.room.entity.Car
 
 
 @Dao
-interface CarDao {
+abstract class CarDao {
   
   @Insert
-  fun insertCars(vararg cars: Car)
+  abstract fun insertCars(vararg cars: Car)
   
   @Update
-  fun updateCars(vararg cars: Car)
+  abstract fun updateCars(vararg cars: Car)
   
   @Delete
-  fun deleteCars(vararg cars: Car)
+  abstract fun deleteCars(vararg cars: Car)
   
-  @Query("SELECT COUNT(carId) FROM car")
-  fun countCars() : Int
+  fun deleteCar(carUuid: String) {
+    deleteCars(getCar(carUuid))
+  }
   
-  @Query("SELECT * FROM car WHERE carId = :id")
-  fun getCar(id: Int) : Car
+  @Query("SELECT * FROM car")
+  abstract fun getAllCars() : List<Car>
+  
+  @Query("SELECT COUNT(uuid) FROM car")
+  abstract fun countCars() : Int
+  
+  @Query("SELECT * FROM car WHERE uuid = :uuid")
+  abstract fun getCar(uuid: String) : Car
   
 }
