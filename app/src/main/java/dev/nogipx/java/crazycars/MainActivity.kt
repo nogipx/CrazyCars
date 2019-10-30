@@ -17,17 +17,17 @@ class MainActivity : AppCompatActivity() {
   
     val db = Room.databaseBuilder(
       applicationContext,
-      AppDatabase::class.java, "crazy_cars_5")
+      AppDatabase::class.java, "crazy_cars")
       .allowMainThreadQueries()
       .build()
   
-    db.firstRunDao().processFirstRun(FirstRun(0, true))
+//    db.firstRunDao().processFirstRun(FirstRun(0, true))
     if (db.firstRunDao().isFirstRun()) {
       fillSamples(db.carDao())
       if (db.carDao().countCars() > 0)
         db.firstRunDao().processFirstRun(FirstRun(0, false))
     }
-  
+    
     val listFragment = CarsListFragment(db)
     supportFragmentManager.beginTransaction()
       .add(R.id.fragmentContainer, listFragment)
@@ -36,10 +36,12 @@ class MainActivity : AppCompatActivity() {
   
   private fun fillSamples(dao: CarDao) {
     val sample = arrayOf(
-      Car("2009", "CR-V", "Honda", "C","crossover"),
-      Car("2005", "RAV4", "Toyota", "C", "crossover"),
-      Car("2017", "Model 3", "Tesla", "D", "sedan")
+      Car("2009", "C-Class", "Mercedes-Benz", "C","sedan"),
+      Car("2005", "ES", "Lexus", "C", "sedan"),
+      Car("2018", "Model 3", "Tesla", "D", "sedan")
     )
-    sample.copyOfRange(dao.countCars(), 3).forEach { dao.insertCars(it) }
+    val count = dao.countCars()
+    if (count <= 3)
+      sample.copyOfRange(count, 3).forEach { dao.insertCars(it) }
   }
 }
