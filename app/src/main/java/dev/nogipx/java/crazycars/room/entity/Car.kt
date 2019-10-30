@@ -6,6 +6,9 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import dev.nogipx.java.crazycars.ExtraInfo
 import java.util.UUID
+import kotlin.reflect.KProperty1
+import kotlin.reflect.full.declaredMemberProperties
+import kotlin.reflect.full.findAnnotation
 
 
 @Entity
@@ -33,4 +36,13 @@ data class Car (
 
 ) {
   @NonNull @PrimaryKey var uuid = UUID.randomUUID().toString()
+  
+  fun isEmpty() : Boolean {
+    return this::class.declaredMemberProperties
+      .filter { it.findAnnotation<ExtraInfo>() != null }
+      .filter { (it as KProperty1<Car, String>).get(this).isNotEmpty() }
+      .count() == 0
+  }
+  
+  fun isNotEmpty() : Boolean = !isEmpty()
 }

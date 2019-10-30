@@ -77,4 +77,10 @@ class CarsCrudTest {
     }
   }
   
+  @Test
+  fun carEmptinessValidation() {
+    assertEquals(false, carsSample[0].isEmpty())
+    assertEquals(true, Car().isEmpty())
+  }
+  
 }

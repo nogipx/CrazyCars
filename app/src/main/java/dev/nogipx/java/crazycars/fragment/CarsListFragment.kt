@@ -46,8 +46,8 @@ class CarsListFragment(private val db: AppDatabase): Fragment() {
       
       onClickEdit = { view, car ->
         val carPreference = CarPreferenceFragment(car).apply {
-          onPauseFun = { car ->
-            dao.insertCars(car)
+          onPauseFun = { car: Car ->
+            dao.updateCars(car)
             viewModel.updateCars(dao.getAllCars())
           }
         }
@@ -61,9 +61,11 @@ class CarsListFragment(private val db: AppDatabase): Fragment() {
     // New record creation
     view.carNew.setOnClickListener {
       val carPreference = CarPreferenceFragment(Car()).apply {
-        onPauseFun = { car ->
-          dao.insertCars(car)
-          viewModel.updateCars(dao.getAllCars())
+        onPauseFun = { car: Car ->
+          if (car.isNotEmpty()) {
+            dao.insertCars(car)
+            viewModel.updateCars(dao.getAllCars())
+          }
         }
       }
       
@@ -75,7 +77,6 @@ class CarsListFragment(private val db: AppDatabase): Fragment() {
     
     // Handle cars set changes
     viewModel.cars.observe(this, Observer { cars ->
-      cars.forEach { dao.updateCars(it) }
       mAdapter.cars = cars
       mAdapter.notifyDataSetChanged()
     })
