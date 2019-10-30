@@ -58,26 +58,14 @@ class CarsListAdapter(var cars: List<Car>)
     
     val carDelete: MaterialButton = view.carDelete
     val carEdit: MaterialButton = view.carEdit
-    
     val infoContainer: TableLayout = view.carInfo
     
     fun createProperty(title: String, value: String) {
 
-      val row = TableRow(ctx).apply {
-        layoutParams = TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT)
-        gravity = Gravity.CENTER_HORIZONTAL
-      }
+      val propView = TextView(ctx, null, 0, R.style.CarCardTitles)
+        .apply { text = "$title:  $value" }
       
-      val titleView = TextView(ctx).apply { text = title }
-      row.addView(titleView)
-      
-      val valueView = TextView(ctx).apply {
-        text = value
-        gravity = Gravity.END
-      }
-      row.addView(valueView)
-      
-      infoContainer.addView(row)
+      infoContainer.addView(propView)
     }
   }
 }
