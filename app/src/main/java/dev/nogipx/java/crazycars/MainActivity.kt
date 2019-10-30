@@ -21,11 +21,11 @@ class MainActivity : AppCompatActivity() {
       .allowMainThreadQueries()
       .build()
   
-//    db.firstRunDao().processFirstRun(FirstRun(0, true))
+    db.firstRunDao().insertFirstRun(FirstRun(0, true))
     if (db.firstRunDao().isFirstRun()) {
       fillSamples(db.carDao())
       if (db.carDao().countCars() > 0)
-        db.firstRunDao().processFirstRun(FirstRun(0, false))
+        db.firstRunDao().updateFirstRun(FirstRun(0, false))
     }
     
     val listFragment = CarsListFragment(db)
